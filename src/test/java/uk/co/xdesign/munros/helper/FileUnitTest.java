@@ -1,9 +1,8 @@
-package uk.co.xdesign.helper;
+package uk.co.xdesign.munros.helper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.co.xdesign.munros.helper.FileUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

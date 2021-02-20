@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+import uk.co.xdesign.munros.helper.MunroHelper;
+import uk.co.xdesign.munros.service.IMunroService;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 @Component
 @SpringBootApplication
@@ -18,14 +20,22 @@ public class Application {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public static void main(String[] args) throws IOException {
-        ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
-        //ctx.getBean(IMunroService.class).loadCsv("munrotab_for_test.csv");
+    @Autowired
+    private MunroHelper munroHelper;
+
+    @Autowired
+    private IMunroService munroService;
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
     }
 
-    // To ident well the response json.
     @PostConstruct
-    public void setup() {
+    public void setup() throws IOException, URISyntaxException {
+        // Initializing munro list from csv file.
+        munroHelper.setMunroList(munroService.loadFromCsv());
+
+        // To ident well the response json.
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 }

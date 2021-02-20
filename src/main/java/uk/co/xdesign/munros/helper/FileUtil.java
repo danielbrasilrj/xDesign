@@ -8,7 +8,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class FileUtil {
+public final class FileUtil {
 
     private FileUtil() {}
 

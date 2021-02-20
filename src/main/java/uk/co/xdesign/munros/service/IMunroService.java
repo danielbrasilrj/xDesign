@@ -7,5 +7,5 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public interface IMunroService {
-    List<MunroDTO> loadFromCsv(String fileName) throws IOException, URISyntaxException;
+    List<MunroDTO> loadFromCsv() throws IOException, URISyntaxException;
 }
