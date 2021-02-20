@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.xdesign.munros.dto.MunroCategory;
 import uk.co.xdesign.munros.dto.MunroDTO;
+import uk.co.xdesign.munros.dto.MunroFilter;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.impl.MunroService;
 
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,7 +42,8 @@ public class MunroServiceTest {
             new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
             new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
             new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
-            new MunroDTO("MUNRO_10", "600", MunroCategory.TOP)
+            new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+            new MunroDTO("MUNRO_10", "600", null)
         );
         given(munroHelper.getMunroList()).willReturn(munroList);
     }
@@ -49,12 +52,45 @@ public class MunroServiceTest {
     public void loadSuccessfully() throws IOException, URISyntaxException {
         given(munroHelper.getFileName()).willReturn("munrotab_for_test.csv");
         List<MunroDTO> munroList = munroService.loadFromCsv();
+
         assertEquals(19, munroList.size());
     }
 
     @Test
     public void findByFilterNull() {
-        List<MunroDTO> result = munroService.findByFilter(null);
+        MunroFilter munroFilter = null;
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
         assertEquals(10, result.size());
+    }
+
+    @Test
+    public void findByFilterExcludingNullCategories() {
+        MunroFilter munroFilter = null;
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(10, result.size());
+    }
+
+    @Test
+    public void findByFilterCategoryNotInformed() {
+        MunroFilter munroFilter = new MunroFilter();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(10, result.size());
+    }
+
+    @Test
+    public void findByFilterCategoryMUN() {
+        MunroFilter munroFilter = new MunroFilter();
+        munroFilter.setMunroCategory(MunroCategory.MUN);
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(5, result.size());
+        assertTrue(result.stream().allMatch(munro -> munro.getPost1997().equals(MunroCategory.MUN.name())));
     }
 }

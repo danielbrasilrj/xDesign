@@ -5,6 +5,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import uk.co.xdesign.munros.dto.MunroCategory;
 import uk.co.xdesign.munros.dto.MunroDTO;
 import uk.co.xdesign.munros.dto.MunroFilter;
 import uk.co.xdesign.munros.helper.FileUtil;
@@ -44,15 +45,23 @@ public class MunroService implements IMunroService {
 
     @Override
     public List<MunroDTO> findByFilter(MunroFilter munroFilter) {
+        List<MunroDTO> munroList = munroHelper.getMunroList();
+
         List<Predicate<MunroDTO>> predicateFilter = new ArrayList<>();
 
+        // Category
+        predicateFilter.add(m -> m.getPost1997() != null);
         if(munroFilter != null) {
             if (munroFilter.getMunroCategory() != null) {
-                predicateFilter.add(m -> m.get_1997().equals(munroFilter.getMunroCategory().name()));
+                predicateFilter.add(m -> munroFilter.getMunroCategory().name().equals(m.getPost1997()));
+            } else {
+                predicateFilter.add(m ->
+                        MunroCategory.MUN.name().equals(m.getPost1997()) ||
+                        MunroCategory.TOP.name().equals(m.getPost1997())
+                );
             }
         }
 
-        List<MunroDTO> munroList = munroHelper.getMunroList();
         return munroList.stream().filter(predicateFilter.stream().reduce(x -> true, Predicate::and)).collect(Collectors.toList());
     }
 }

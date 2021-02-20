@@ -12,7 +12,9 @@ public class MunroDTO  implements Serializable {
     public MunroDTO(String name, String heightMeter, MunroCategory munroCategory) {
         this.name = name;
         HeightMeter = heightMeter;
-        this.post1997 = munroCategory.name();
+        if(munroCategory != null) {
+            this.post1997 = munroCategory.name();
+        }
     }
 
     @CsvBindByPosition(position = 0)
