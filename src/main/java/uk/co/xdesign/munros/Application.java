@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
-import uk.co.xdesign.munros.helper.MunroHelper;
+import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.IMunroService;
 
 import javax.annotation.PostConstruct;

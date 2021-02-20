@@ -7,6 +7,14 @@ import java.io.Serializable;
 public class MunroDTO  implements Serializable {
     private static final long serialVersionUID = -6974068521803009285L;
 
+    public MunroDTO() {}
+
+    public MunroDTO(String name, String heightMeter, MunroCategory munroCategory) {
+        this.name = name;
+        HeightMeter = heightMeter;
+        this.post1997 = munroCategory.name();
+    }
+
     @CsvBindByPosition(position = 0)
     private String runningNo;
 

@@ -1,7 +1,8 @@
-package uk.co.xdesign.munros.helper;
+package uk.co.xdesign.munros.helper.impl;
 
 import org.springframework.stereotype.Component;
 import uk.co.xdesign.munros.dto.MunroDTO;
+import uk.co.xdesign.munros.helper.IMunroHelper;
 
 import java.util.List;
 
@@ -12,13 +13,13 @@ public class MunroHelper implements IMunroHelper {
 
     private List<MunroDTO> munroList;
 
+    public List<MunroDTO> getMunroList() {
+        return munroList;
+    }
+
     @Override
     public void setMunroList(List<MunroDTO> munroList) {
         this.munroList = munroList;
-    }
-
-    public List<MunroDTO> getMunroList() {
-        return munroList;
     }
 
     @Override
