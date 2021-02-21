@@ -10,6 +10,7 @@ import uk.co.xdesign.munros.dto.MunroCategory;
 import uk.co.xdesign.munros.dto.MunroDTO;
 import uk.co.xdesign.munros.dto.MunroFilter;
 import uk.co.xdesign.munros.dto.SortBy;
+import uk.co.xdesign.munros.exeption.FilterException;
 import uk.co.xdesign.munros.helper.FileUtil;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.IMunroService;
@@ -62,6 +63,9 @@ public class MunroService implements IMunroService {
 
     private List<MunroDTO> limit(MunroFilter munroFilter, List<MunroDTO> result) {
         if(munroFilter != null && munroFilter.getLimit() != null) {
+            if(munroFilter.getLimit() < 1) {
+                throw new FilterException("The limit must be grather than 0.");
+            }
             result = result.stream().limit(munroFilter.getLimit()).collect(Collectors.toList());
         }
         return result;
@@ -96,6 +100,10 @@ public class MunroService implements IMunroService {
                         MunroCategory.MUN.name().equals(m.getPost1997()) ||
                         MunroCategory.TOP.name().equals(m.getPost1997())
                 );
+            }
+
+            if(munroFilter.getMinHeight() != null && munroFilter.getMaxHeight() != null && munroFilter.getMinHeight() > munroFilter.getMaxHeight()) {
+                throw new FilterException("The minimum height cannot be grather than maximum height.");
             }
 
             // Minimum height

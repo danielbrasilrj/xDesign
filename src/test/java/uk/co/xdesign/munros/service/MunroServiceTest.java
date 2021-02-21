@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.xdesign.munros.dto.*;
+import uk.co.xdesign.munros.exeption.FilterException;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.impl.MunroService;
 
@@ -266,12 +267,12 @@ public class MunroServiceTest {
     @Test
     public void findByMultipleFilter() {
         MunroFilter munroFilter = MunroFilterBuilder.builder()
-                                    .byCategory(MunroCategory.MUN)
-                                    .byMinimumHeight(100)
-                                    .byMaximumHeight(500)
-                                    .orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC)
-                                    .limit(2)
-                                    .build();
+                .byCategory(MunroCategory.MUN)
+                .byMinimumHeight(100)
+                .byMaximumHeight(500)
+                .orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC)
+                .limit(2)
+                .build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -280,5 +281,33 @@ public class MunroServiceTest {
                 new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
                 new MunroDTO("MUNRO_5", "300", MunroCategory.MUN)
         ));
+    }
+
+    @Test(expected = FilterException.class)
+    public void errorWhenMinimumHeightIsGratherThanMaximumHeight() {
+        MunroFilter munroFilter = MunroFilterBuilder.builder()
+                .byMinimumHeight(200)
+                .byMaximumHeight(100)
+                .build();
+
+        munroService.findByFilter(munroFilter);
+    }
+
+    @Test(expected = FilterException.class)
+    public void errorWhenLimitIsZero() {
+        MunroFilter munroFilter = MunroFilterBuilder.builder()
+                .limit(0)
+                .build();
+
+        munroService.findByFilter(munroFilter);
+    }
+
+    @Test(expected = FilterException.class)
+    public void errorWhenLimitIsNegative() {
+        MunroFilter munroFilter = MunroFilterBuilder.builder()
+                .limit(-1)
+                .build();
+
+        munroService.findByFilter(munroFilter);
     }
 }
