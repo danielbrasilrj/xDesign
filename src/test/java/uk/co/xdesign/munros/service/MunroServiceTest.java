@@ -262,4 +262,23 @@ public class MunroServiceTest {
 
         assertEquals(9, result.size());
     }
+
+    @Test
+    public void findByMultipleFilter() {
+        MunroFilter munroFilter = MunroFilterBuilder.builder()
+                                    .byCategory(MunroCategory.MUN)
+                                    .byMinimumHeight(100)
+                                    .byMaximumHeight(500)
+                                    .orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC)
+                                    .limit(2)
+                                    .build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(2, result.size());
+        assertThat(result, contains(
+                new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
+                new MunroDTO("MUNRO_5", "300", MunroCategory.MUN)
+        ));
+    }
 }
