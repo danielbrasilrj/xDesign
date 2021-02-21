@@ -22,6 +22,11 @@ public class MunroFilterBuilder {
         return this;
     }
 
+    public MunroFilterBuilder byMaximumHeight(Integer maximumHeight) {
+        munroFilter.setMaxHeight(maximumHeight);
+        return this;
+    }
+
     public MunroFilterBuilder orderBy(SortBy.Property property) {
         SortBy sortBy = new SortBy();
         sortBy.setProperty(property);

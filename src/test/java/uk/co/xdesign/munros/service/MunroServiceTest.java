@@ -253,4 +253,13 @@ public class MunroServiceTest {
 
         assertEquals(3, result.size());
     }
+
+    @Test
+    public void findByFilterMaximumHeight() {
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byMaximumHeight(450).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(9, result.size());
+    }
 }

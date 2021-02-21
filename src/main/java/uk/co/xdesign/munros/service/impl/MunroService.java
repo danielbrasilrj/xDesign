@@ -102,6 +102,11 @@ public class MunroService implements IMunroService {
             if (munroFilter.getMinHeight() != null) {
                 predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && Integer.parseInt(m.getHeightMeter()) > munroFilter.getMinHeight());
             }
+
+            // Maximum height
+            if (munroFilter.getMaxHeight() != null) {
+                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && Integer.parseInt(m.getHeightMeter()) < munroFilter.getMaxHeight());
+            }
         }
 
         return munroList.stream().filter(predicateFilter.stream().reduce(x -> true, Predicate::and)).collect(Collectors.toList());
