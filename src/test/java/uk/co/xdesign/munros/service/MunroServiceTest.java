@@ -122,4 +122,76 @@ public class MunroServiceTest {
                 new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP)
         ));
     }
+
+    @Test
+    public void findByFilterOrderByHeightDesc() {
+        MunroFilterBuilder builder = MunroFilterBuilder.builder();
+        MunroFilter munroFilter = builder.orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(12, result.size());
+        assertThat(result, contains(
+                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP),
+                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
+                new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
+                new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
+                new MunroDTO("MUNRO_5", "300", MunroCategory.MUN),
+                new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
+                new MunroDTO("MUNRO_2", "200", MunroCategory.MUN),
+                new MunroDTO("MUNRO_4", "200", MunroCategory.TOP),
+                new MunroDTO("MUNRO_1", "100", MunroCategory.MUN),
+                new MunroDTO("MUNRO_3", "100", MunroCategory.TOP),
+                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN)
+        ));
+    }
+
+    @Test
+    public void findByFilterOrderByNameAsc() {
+        MunroFilterBuilder builder = MunroFilterBuilder.builder();
+        MunroFilter munroFilter = builder.orderBy(SortBy.Property.NAME, SortBy.Direction.ASC).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(12, result.size());
+        assertThat(result, contains(
+                new MunroDTO("MUNRO_1", "100", MunroCategory.MUN),
+                new MunroDTO("MUNRO_2", "200", MunroCategory.MUN),
+                new MunroDTO("MUNRO_3", "100", MunroCategory.TOP),
+                new MunroDTO("MUNRO_4", "200", MunroCategory.TOP),
+                new MunroDTO("MUNRO_5", "300", MunroCategory.MUN),
+                new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
+                new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
+                new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
+                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
+                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
+                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP)
+        ));
+    }
+
+    @Test
+    public void findByFilterOrderByNameDesc() {
+        MunroFilterBuilder builder = MunroFilterBuilder.builder();
+        MunroFilter munroFilter = builder.orderBy(SortBy.Property.NAME, SortBy.Direction.DESC).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(12, result.size());
+        assertThat(result, contains(
+                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
+                new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
+                new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
+                new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
+                new MunroDTO("MUNRO_5", "300", MunroCategory.MUN),
+                new MunroDTO("MUNRO_4", "200", MunroCategory.TOP),
+                new MunroDTO("MUNRO_3", "100", MunroCategory.TOP),
+                new MunroDTO("MUNRO_2", "200", MunroCategory.MUN),
+                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP),
+                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
+                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+                new MunroDTO("MUNRO_1", "100", MunroCategory.MUN)
+        ));
+    }
 }

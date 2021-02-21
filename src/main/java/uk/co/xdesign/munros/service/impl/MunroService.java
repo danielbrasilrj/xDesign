@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uk.co.xdesign.munros.dto.MunroCategory;
 import uk.co.xdesign.munros.dto.MunroDTO;
 import uk.co.xdesign.munros.dto.MunroFilter;
+import uk.co.xdesign.munros.dto.SortBy;
 import uk.co.xdesign.munros.helper.FileUtil;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.IMunroService;
@@ -23,8 +24,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
-import static java.util.Comparator.reverseOrder;
 
 @Service
 public class MunroService implements IMunroService {
@@ -71,10 +72,28 @@ public class MunroService implements IMunroService {
 
         // Sort
         if (munroFilter != null && munroFilter.getSortBy() != null) {
-            Comparator<MunroDTO> comparator = comparingInt(m -> StringUtils.isNotEmpty(m.getHeightMeter()) ? Integer.parseInt(m.getHeightMeter()) : 0);
-            result.sort(comparator);
+            Comparator<MunroDTO> comparator = getComparator(munroFilter.getSortBy());
+
+            // Sort direction
+            if(comparator != null) {
+                if (munroFilter.getSortBy().isDesc()) {
+                    result.sort(comparator.reversed());
+                } else {
+                    result.sort(comparator);
+                }
+            }
         }
 
         return result;
+    }
+
+    private Comparator<MunroDTO> getComparator(SortBy sortBy) {
+        if(sortBy != null && sortBy.height()) {
+            return comparingInt(m -> StringUtils.isNotEmpty(m.getHeightMeter()) ? Integer.parseInt(m.getHeightMeter()) : 0);
+        } else if(sortBy != null && sortBy.name()) {
+            return comparing(m -> StringUtils.isNotEmpty(m.getName()) ? m.getName() : "");
+        } else {
+            return null;
+        }
     }
 }
