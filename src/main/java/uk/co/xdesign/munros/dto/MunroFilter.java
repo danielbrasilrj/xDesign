@@ -8,6 +8,7 @@ public class MunroFilter implements Serializable {
     private MunroCategory munroCategory;
     private SortBy sortBy;
     private Integer limit;
+    private Integer minHeight;
 
     public MunroCategory getMunroCategory() {
         return munroCategory;
@@ -21,4 +22,7 @@ public class MunroFilter implements Serializable {
 
     public Integer getLimit() { return limit; }
     public void setLimit(Integer limit) { this.limit = limit; }
+
+    public Integer getMinHeight() { return minHeight; }
+    public void setMinHeight(Integer minHeight) { this.minHeight = minHeight; }
 }

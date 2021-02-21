@@ -17,6 +17,11 @@ public class MunroFilterBuilder {
         return this;
     }
 
+    public MunroFilterBuilder byMinimumHeight(Integer minimumHeight) {
+        munroFilter.setMinHeight(minimumHeight);
+        return this;
+    }
+
     public MunroFilterBuilder orderBy(SortBy.Property property) {
         SortBy sortBy = new SortBy();
         sortBy.setProperty(property);

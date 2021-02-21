@@ -69,7 +69,7 @@ public class MunroService implements IMunroService {
 
     private void sort(MunroFilter munroFilter, List<MunroDTO> result) {
         if (munroFilter != null && munroFilter.getSortBy() != null) {
-            Comparator<MunroDTO> comparator = getComparator(munroFilter.getSortBy());
+            Comparator<MunroDTO> comparator = getSortByComparator(munroFilter.getSortBy());
 
             // Sort direction
             if(comparator != null) {
@@ -97,12 +97,17 @@ public class MunroService implements IMunroService {
                         MunroCategory.TOP.name().equals(m.getPost1997())
                 );
             }
+
+            // Minimum height
+            if (munroFilter.getMinHeight() != null) {
+                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && Integer.parseInt(m.getHeightMeter()) > munroFilter.getMinHeight());
+            }
         }
 
         return munroList.stream().filter(predicateFilter.stream().reduce(x -> true, Predicate::and)).collect(Collectors.toList());
     }
 
-    private Comparator<MunroDTO> getComparator(SortBy sortBy) {
+    private Comparator<MunroDTO> getSortByComparator(SortBy sortBy) {
         if(sortBy != null && sortBy.height()) {
             return comparingInt(m -> StringUtils.isNotEmpty(m.getHeightMeter()) ? Integer.parseInt(m.getHeightMeter()) : 0);
         } else if(sortBy != null && sortBy.name()) {
