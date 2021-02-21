@@ -32,6 +32,11 @@ public class MunroFilterBuilder {
         return this;
     }
 
+    public MunroFilterBuilder limit(Integer limit) {
+        munroFilter.setLimit(limit);
+        return this;
+    }
+
     public MunroFilter build() {
         return munroFilter;
     }

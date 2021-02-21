@@ -7,6 +7,7 @@ public class MunroFilter implements Serializable {
 
     private MunroCategory munroCategory;
     private SortBy sortBy;
+    private Integer limit;
 
     public MunroCategory getMunroCategory() {
         return munroCategory;
@@ -17,4 +18,7 @@ public class MunroFilter implements Serializable {
 
     public SortBy getSortBy() { return sortBy; }
     public void setSortBy(SortBy sortBy) { this.sortBy = sortBy; }
+
+    public Integer getLimit() { return limit; }
+    public void setLimit(Integer limit) { this.limit = limit; }
 }

@@ -157,6 +157,9 @@ public class MunroServiceTest {
         assertEquals(12, result.size());
         assertThat(result, contains(
                 new MunroDTO("MUNRO_1", "100", MunroCategory.MUN),
+                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
+                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP),
                 new MunroDTO("MUNRO_2", "200", MunroCategory.MUN),
                 new MunroDTO("MUNRO_3", "100", MunroCategory.TOP),
                 new MunroDTO("MUNRO_4", "200", MunroCategory.TOP),
@@ -164,10 +167,7 @@ public class MunroServiceTest {
                 new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
                 new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
                 new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
-                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
-                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
-                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
-                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP)
+                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN)
         ));
     }
 
@@ -193,5 +193,15 @@ public class MunroServiceTest {
                 new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
                 new MunroDTO("MUNRO_1", "100", MunroCategory.MUN)
         ));
+    }
+
+    @Test
+    public void findByFilterLimitTo5() {
+        MunroFilterBuilder builder = MunroFilterBuilder.builder();
+        MunroFilter munroFilter = builder.limit(5).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(5, result.size());
     }
 }

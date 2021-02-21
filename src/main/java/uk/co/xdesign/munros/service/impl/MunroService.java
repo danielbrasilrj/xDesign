@@ -53,24 +53,21 @@ public class MunroService implements IMunroService {
     public List<MunroDTO> findByFilter(MunroFilter munroFilter) {
         List<MunroDTO> munroList = munroHelper.getMunroList();
 
-        List<Predicate<MunroDTO>> predicateFilter = new ArrayList<>();
+        List<MunroDTO> result = filter(munroFilter, munroList);
+        sort(munroFilter, result);
+        result = limit(munroFilter, result);
 
-        predicateFilter.add(m -> m.getPost1997() != null);
-        if(munroFilter != null) {
-            // Category
-            if (munroFilter.getMunroCategory() != null) {
-                predicateFilter.add(m -> munroFilter.getMunroCategory().name().equals(m.getPost1997()));
-            } else {
-                predicateFilter.add(m ->
-                        MunroCategory.MUN.name().equals(m.getPost1997()) ||
-                        MunroCategory.TOP.name().equals(m.getPost1997())
-                );
-            }
+        return result;
+    }
+
+    private List<MunroDTO> limit(MunroFilter munroFilter, List<MunroDTO> result) {
+        if(munroFilter != null && munroFilter.getLimit() != null) {
+            result = result.stream().limit(munroFilter.getLimit()).collect(Collectors.toList());
         }
+        return result;
+    }
 
-        List<MunroDTO> result = munroList.stream().filter(predicateFilter.stream().reduce(x -> true, Predicate::and)).collect(Collectors.toList());
-
-        // Sort
+    private void sort(MunroFilter munroFilter, List<MunroDTO> result) {
         if (munroFilter != null && munroFilter.getSortBy() != null) {
             Comparator<MunroDTO> comparator = getComparator(munroFilter.getSortBy());
 
@@ -83,8 +80,26 @@ public class MunroService implements IMunroService {
                 }
             }
         }
+    }
 
-        return result;
+    private List<MunroDTO> filter(MunroFilter munroFilter, List<MunroDTO> munroList) {
+        List<Predicate<MunroDTO>> predicateFilter = new ArrayList<>();
+
+        predicateFilter.add(m -> m.getPost1997() != null);
+        if(munroFilter != null) {
+
+            // Category
+            if (munroFilter.getMunroCategory() != null) {
+                predicateFilter.add(m -> munroFilter.getMunroCategory().name().equals(m.getPost1997()));
+            } else {
+                predicateFilter.add(m ->
+                        MunroCategory.MUN.name().equals(m.getPost1997()) ||
+                        MunroCategory.TOP.name().equals(m.getPost1997())
+                );
+            }
+        }
+
+        return munroList.stream().filter(predicateFilter.stream().reduce(x -> true, Predicate::and)).collect(Collectors.toList());
     }
 
     private Comparator<MunroDTO> getComparator(SortBy sortBy) {
