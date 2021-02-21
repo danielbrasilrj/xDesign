@@ -6,9 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import uk.co.xdesign.munros.dto.MunroCategory;
-import uk.co.xdesign.munros.dto.MunroDTO;
-import uk.co.xdesign.munros.dto.MunroFilter;
+import uk.co.xdesign.munros.dto.*;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.impl.MunroService;
 
@@ -20,6 +18,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MunroServiceTest {
@@ -43,7 +43,10 @@ public class MunroServiceTest {
             new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
             new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
             new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
-            new MunroDTO("MUNRO_10", "600", null)
+            new MunroDTO("MUNRO_11", "600", null),
+            new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
+            new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP),
+            new MunroDTO("MUNRO_14", "1500", null)
         );
         given(munroHelper.getMunroList()).willReturn(munroList);
     }
@@ -62,16 +65,7 @@ public class MunroServiceTest {
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
-        assertEquals(10, result.size());
-    }
-
-    @Test
-    public void findByFilterExcludingNullCategories() {
-        MunroFilter munroFilter = null;
-
-        List<MunroDTO> result = munroService.findByFilter(munroFilter);
-
-        assertEquals(10, result.size());
+        assertEquals(12, result.size());
     }
 
     @Test
@@ -80,7 +74,7 @@ public class MunroServiceTest {
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
-        assertEquals(10, result.size());
+        assertEquals(12, result.size());
     }
 
     @Test
@@ -90,7 +84,42 @@ public class MunroServiceTest {
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
-        assertEquals(5, result.size());
+        assertEquals(6, result.size());
         assertTrue(result.stream().allMatch(munro -> munro.getPost1997().equals(MunroCategory.MUN.name())));
+    }
+
+    @Test
+    public void findByFilterCategoryTOP() {
+        MunroFilter munroFilter = new MunroFilter();
+        munroFilter.setMunroCategory(MunroCategory.TOP);
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(6, result.size());
+        assertTrue(result.stream().allMatch(munro -> munro.getPost1997().equals(MunroCategory.TOP.name())));
+    }
+
+    @Test
+    public void findByFilterOrderByHeightAsc() {
+        MunroFilterBuilder builder = MunroFilterBuilder.builder();
+        MunroFilter munroFilter = builder.orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.ASC).build();
+
+        List<MunroDTO> result = munroService.findByFilter(munroFilter);
+
+        assertEquals(12, result.size());
+        assertThat(result, contains(
+                new MunroDTO("MUNRO_12", "10", MunroCategory.MUN),
+                new MunroDTO("MUNRO_1", "100", MunroCategory.MUN),
+                new MunroDTO("MUNRO_3", "100", MunroCategory.TOP),
+                new MunroDTO("MUNRO_2", "200", MunroCategory.MUN),
+                new MunroDTO("MUNRO_4", "200", MunroCategory.TOP),
+                new MunroDTO("MUNRO_5", "300", MunroCategory.MUN),
+                new MunroDTO("MUNRO_7", "300", MunroCategory.TOP),
+                new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
+                new MunroDTO("MUNRO_8", "400", MunroCategory.TOP),
+                new MunroDTO("MUNRO_9", "500", MunroCategory.MUN),
+                new MunroDTO("MUNRO_10", "600", MunroCategory.TOP),
+                new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP)
+        ));
     }
 }

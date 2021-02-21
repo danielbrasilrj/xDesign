@@ -3,6 +3,7 @@ package uk.co.xdesign.munros.dto;
 import com.opencsv.bean.CsvBindByPosition;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class MunroDTO  implements Serializable {
     private static final long serialVersionUID = -6974068521803009285L;
@@ -334,5 +335,30 @@ public class MunroDTO  implements Serializable {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "MunroDTO{" +
+                "name='" + name + '\'' +
+                ", HeightMeter='" + HeightMeter + '\'' +
+                ", post1997='" + post1997 + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MunroDTO)) return false;
+        MunroDTO munroDTO = (MunroDTO) o;
+        return Objects.equals(getRunningNo(), munroDTO.getRunningNo()) &&
+                Objects.equals(getName(), munroDTO.getName()) &&
+                Objects.equals(getHeightMeter(), munroDTO.getHeightMeter()) &&
+                Objects.equals(getPost1997(), munroDTO.getPost1997());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRunningNo(), getName(), getHeightMeter(), getPost1997());
     }
 }
