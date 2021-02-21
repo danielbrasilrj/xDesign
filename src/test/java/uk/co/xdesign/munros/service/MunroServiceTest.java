@@ -70,7 +70,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterCategoryNotInformed() {
-        MunroFilter munroFilter = new MunroFilter();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -79,8 +79,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterCategoryMUN() {
-        MunroFilter munroFilter = new MunroFilter();
-        munroFilter.setMunroCategory(MunroCategory.MUN);
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byCategory(MunroCategory.MUN).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -90,8 +89,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterCategoryTOP() {
-        MunroFilter munroFilter = new MunroFilter();
-        munroFilter.setMunroCategory(MunroCategory.TOP);
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byCategory(MunroCategory.TOP).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -101,8 +99,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByHeightAsc() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.ASC).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.ASC).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -125,8 +122,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByHeightDesc() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -149,8 +145,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByNameAsc() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.NAME, SortBy.Direction.ASC).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.NAME, SortBy.Direction.ASC).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -173,8 +168,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByNameDesc() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.NAME, SortBy.Direction.DESC).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.NAME, SortBy.Direction.DESC).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -197,8 +191,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByHeightWithoutDirection() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.HEIGHT_METER).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.HEIGHT_METER).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -221,8 +214,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterOrderByNameWithoutDirection() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.orderBy(SortBy.Property.NAME).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().orderBy(SortBy.Property.NAME).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -255,8 +247,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterMinimunHeight() {
-        MunroFilterBuilder builder = MunroFilterBuilder.builder();
-        MunroFilter munroFilter = builder.byMinimumHeight(450).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byMinimumHeight(450).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
