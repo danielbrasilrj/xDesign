@@ -1,6 +1,7 @@
 package uk.co.xdesign.munros.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class MunroFilter implements Serializable {
     private static final long serialVersionUID = -5864232185152193788L;
@@ -8,8 +9,8 @@ public class MunroFilter implements Serializable {
     private MunroCategory munroCategory;
     private SortBy sortBy;
     private Integer limit;
-    private Integer minHeight;
-    private Integer maxHeight;
+    private BigDecimal minHeight;
+    private BigDecimal maxHeight;
 
     public MunroCategory getMunroCategory() {
         return munroCategory;
@@ -24,9 +25,9 @@ public class MunroFilter implements Serializable {
     public Integer getLimit() { return limit; }
     public void setLimit(Integer limit) { this.limit = limit; }
 
-    public Integer getMinHeight() { return minHeight; }
-    public void setMinHeight(Integer minHeight) { this.minHeight = minHeight; }
+    public BigDecimal getMinHeight() { return minHeight; }
+    public void setMinHeight(BigDecimal minHeight) { this.minHeight = minHeight; }
 
-    public Integer getMaxHeight() { return maxHeight; }
-    public void setMaxHeight(Integer maxHeight) { this.maxHeight = maxHeight; }
+    public BigDecimal getMaxHeight() { return maxHeight; }
+    public void setMaxHeight(BigDecimal maxHeight) { this.maxHeight = maxHeight; }
 }

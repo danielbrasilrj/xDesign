@@ -12,6 +12,7 @@ import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.impl.MunroService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
@@ -248,7 +249,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterMinimunHeight() {
-        MunroFilter munroFilter = MunroFilterBuilder.builder().byMinimumHeight(450).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byMinimumHeight(new BigDecimal("450")).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -257,7 +258,7 @@ public class MunroServiceTest {
 
     @Test
     public void findByFilterMaximumHeight() {
-        MunroFilter munroFilter = MunroFilterBuilder.builder().byMaximumHeight(450).build();
+        MunroFilter munroFilter = MunroFilterBuilder.builder().byMaximumHeight(new BigDecimal("450")).build();
 
         List<MunroDTO> result = munroService.findByFilter(munroFilter);
 
@@ -268,8 +269,8 @@ public class MunroServiceTest {
     public void findByMultipleFilter() {
         MunroFilter munroFilter = MunroFilterBuilder.builder()
                 .byCategory(MunroCategory.MUN)
-                .byMinimumHeight(100)
-                .byMaximumHeight(500)
+                .byMinimumHeight(new BigDecimal("100"))
+                .byMaximumHeight(new BigDecimal("500"))
                 .orderBy(SortBy.Property.HEIGHT_METER, SortBy.Direction.DESC)
                 .limit(2)
                 .build();
@@ -286,8 +287,8 @@ public class MunroServiceTest {
     @Test(expected = FilterException.class)
     public void errorWhenMinimumHeightIsGratherThanMaximumHeight() {
         MunroFilter munroFilter = MunroFilterBuilder.builder()
-                .byMinimumHeight(200)
-                .byMaximumHeight(100)
+                .byMinimumHeight(new BigDecimal("200"))
+                .byMaximumHeight(new BigDecimal("100"))
                 .build();
 
         munroService.findByFilter(munroFilter);

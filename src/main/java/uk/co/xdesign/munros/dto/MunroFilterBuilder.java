@@ -1,5 +1,7 @@
 package uk.co.xdesign.munros.dto;
 
+import java.math.BigDecimal;
+
 public class MunroFilterBuilder {
 
     private final MunroFilter munroFilter;
@@ -17,12 +19,12 @@ public class MunroFilterBuilder {
         return this;
     }
 
-    public MunroFilterBuilder byMinimumHeight(Integer minimumHeight) {
+    public MunroFilterBuilder byMinimumHeight(BigDecimal minimumHeight) {
         munroFilter.setMinHeight(minimumHeight);
         return this;
     }
 
-    public MunroFilterBuilder byMaximumHeight(Integer maximumHeight) {
+    public MunroFilterBuilder byMaximumHeight(BigDecimal maximumHeight) {
         munroFilter.setMaxHeight(maximumHeight);
         return this;
     }

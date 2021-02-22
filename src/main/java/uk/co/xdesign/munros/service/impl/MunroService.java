@@ -18,6 +18,7 @@ import uk.co.xdesign.munros.service.IMunroService;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -66,7 +67,7 @@ public class MunroService implements IMunroService {
             if(munroFilter.getLimit() < 1) {
                 throw new FilterException("The limit must be grather than 0.");
             }
-            result = result.stream().limit(munroFilter.getLimit()).collect(Collectors.toList());
+            result = result.stream().limit(munroFilter.getLimit().longValue()).collect(Collectors.toList());
         }
         return result;
     }
@@ -102,18 +103,18 @@ public class MunroService implements IMunroService {
                 );
             }
 
-            if(munroFilter.getMinHeight() != null && munroFilter.getMaxHeight() != null && munroFilter.getMinHeight() > munroFilter.getMaxHeight()) {
+            if(munroFilter.getMinHeight() != null && munroFilter.getMaxHeight() != null && munroFilter.getMinHeight().compareTo(munroFilter.getMaxHeight()) > 0) {
                 throw new FilterException("The minimum height cannot be grather than maximum height.");
             }
 
             // Minimum height
             if (munroFilter.getMinHeight() != null) {
-                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && Integer.parseInt(m.getHeightMeter()) > munroFilter.getMinHeight());
+                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && (new BigDecimal(m.getHeightMeter())).compareTo(munroFilter.getMinHeight()) > 0);
             }
 
             // Maximum height
             if (munroFilter.getMaxHeight() != null) {
-                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && Integer.parseInt(m.getHeightMeter()) < munroFilter.getMaxHeight());
+                predicateFilter.add(m -> StringUtils.isNotEmpty(m.getHeightMeter()) && new BigDecimal(m.getHeightMeter()).compareTo(munroFilter.getMaxHeight()) < 0);
             }
         }
 
@@ -122,7 +123,7 @@ public class MunroService implements IMunroService {
 
     private Comparator<MunroDTO> getSortByComparator(SortBy sortBy) {
         if(sortBy != null && sortBy.height()) {
-            return comparingInt(m -> StringUtils.isNotEmpty(m.getHeightMeter()) ? Integer.parseInt(m.getHeightMeter()) : 0);
+            return comparingInt(m -> StringUtils.isNotEmpty(m.getHeightMeter()) ? (int) Double.parseDouble(m.getHeightMeter()) : 0);
         } else if(sortBy != null && sortBy.name()) {
             return comparing(m -> StringUtils.isNotEmpty(m.getName()) ? m.getName() : "");
         } else {
