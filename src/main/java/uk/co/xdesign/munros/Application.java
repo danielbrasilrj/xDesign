@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.IMunroService;
@@ -19,7 +20,8 @@ import java.net.URISyntaxException;
 
 @Component
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
+@ComponentScan({"uk.co.xdesign.munros"})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
 public class Application {
 
     @Autowired
