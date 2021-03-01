@@ -10,11 +10,12 @@ import uk.co.xdesign.munros.dto.MunroCategory;
 import uk.co.xdesign.munros.dto.MunroDTO;
 import uk.co.xdesign.munros.dto.MunroFilter;
 import uk.co.xdesign.munros.dto.SortBy;
-import uk.co.xdesign.munros.exeption.FilterException;
 import uk.co.xdesign.munros.helper.FileUtil;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.IMunroService;
+import uk.co.xdesign.munros.validator.IMunroValidator;
 
+import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,6 +36,9 @@ public class MunroService implements IMunroService {
     @Autowired
     private MunroHelper munroHelper;
 
+    @Resource
+    private IMunroValidator munroValidator;
+
     @Override
     public List<MunroDTO> loadFromCsv() throws IOException, URISyntaxException {
         BufferedReader reader = FileUtil.getReader(munroHelper.getFileName());
@@ -53,6 +57,7 @@ public class MunroService implements IMunroService {
 
     @Override
     public List<MunroDTO> findByFilter(MunroFilter munroFilter) {
+        munroValidator.validateFilter(munroFilter);
         List<MunroDTO> munroList = munroHelper.getMunroList();
 
         List<MunroDTO> result = filter(munroFilter, munroList);
@@ -64,9 +69,6 @@ public class MunroService implements IMunroService {
 
     private List<MunroDTO> limit(MunroFilter munroFilter, List<MunroDTO> result) {
         if(munroFilter != null && munroFilter.getLimit() != null) {
-            if(munroFilter.getLimit() < 1) {
-                throw new FilterException("The limit must be grather than 0.");
-            }
             result = result.stream().limit(munroFilter.getLimit().longValue()).collect(Collectors.toList());
         }
         return result;
@@ -88,6 +90,8 @@ public class MunroService implements IMunroService {
     }
 
     private List<MunroDTO> filter(MunroFilter munroFilter, List<MunroDTO> munroList) {
+        munroValidator.validateFilter(munroFilter);
+
         List<Predicate<MunroDTO>> predicateFilter = new ArrayList<>();
 
         predicateFilter.add(m -> m.getPost1997() != null);
@@ -101,10 +105,6 @@ public class MunroService implements IMunroService {
                         MunroCategory.MUN.name().equals(m.getPost1997()) ||
                         MunroCategory.TOP.name().equals(m.getPost1997())
                 );
-            }
-
-            if(munroFilter.getMinHeight() != null && munroFilter.getMaxHeight() != null && munroFilter.getMinHeight().compareTo(munroFilter.getMaxHeight()) > 0) {
-                throw new FilterException("The minimum height cannot be grather than maximum height.");
             }
 
             // Minimum height

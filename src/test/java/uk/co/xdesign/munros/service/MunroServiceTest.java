@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import uk.co.xdesign.munros.dto.*;
-import uk.co.xdesign.munros.exeption.FilterException;
 import uk.co.xdesign.munros.helper.impl.MunroHelper;
 import uk.co.xdesign.munros.service.impl.MunroService;
+import uk.co.xdesign.munros.validator.impl.MunroValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,17 +17,22 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MunroServiceTest {
 
     @Mock
     private MunroHelper munroHelper;
+
+    @Mock
+    private MunroValidator munroValidator;
 
     @InjectMocks
     private MunroService munroService;
@@ -50,7 +55,9 @@ public class MunroServiceTest {
             new MunroDTO("MUNRO_13", "1000", MunroCategory.TOP),
             new MunroDTO("MUNRO_14", "1500", null)
         );
+
         given(munroHelper.getMunroList()).willReturn(munroList);
+        doNothing().when(munroValidator).validateFilter(any(MunroFilter.class));
     }
 
     @Test
@@ -282,33 +289,5 @@ public class MunroServiceTest {
                 new MunroDTO("MUNRO_6", "400", MunroCategory.MUN),
                 new MunroDTO("MUNRO_5", "300", MunroCategory.MUN)
         ));
-    }
-
-    @Test(expected = FilterException.class)
-    public void errorWhenMinimumHeightIsGratherThanMaximumHeight() {
-        MunroFilter munroFilter = MunroFilterBuilder.builder()
-                .byMinimumHeight(new BigDecimal("200"))
-                .byMaximumHeight(new BigDecimal("100"))
-                .build();
-
-        munroService.findByFilter(munroFilter);
-    }
-
-    @Test(expected = FilterException.class)
-    public void errorWhenLimitIsZero() {
-        MunroFilter munroFilter = MunroFilterBuilder.builder()
-                .limit(0)
-                .build();
-
-        munroService.findByFilter(munroFilter);
-    }
-
-    @Test(expected = FilterException.class)
-    public void errorWhenLimitIsNegative() {
-        MunroFilter munroFilter = MunroFilterBuilder.builder()
-                .limit(-1)
-                .build();
-
-        munroService.findByFilter(munroFilter);
     }
 }
